@@ -204,6 +204,7 @@ export default function LoginScreen() {
                 </label>
                 <button
                   type="button"
+                  onClick={() => navigate('/forgot')}
                   className="text-indigo-600 hover:text-indigo-700 font-medium transition-colors"
                 >
                   Forgot password?

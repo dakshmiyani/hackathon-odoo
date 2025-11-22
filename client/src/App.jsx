@@ -8,6 +8,9 @@ import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import Dashboard from './screens/Dashboard'
 import ReceiptsManagement from './screens/ReceiptsManagement'
 import VerifyEmail from "./screens/VerifyEmail";
+import ForgotPassword from './screens/ForgotPass'
+import ResetOtp from "./screens/ResetOTP";
+import ResetPassword from "./screens/ResetPassword";
 
 
 function App() {
@@ -24,6 +27,9 @@ function App() {
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/verify-email" element={<VerifyEmail />} />
+        <Route path="/forgot" element={<ForgotPassword />} />
+        <Route path="/reset-otp" element={<ResetOtp />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/receipt" element={<ReceiptsManagement />} />
       </Routes>
