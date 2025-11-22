@@ -41,9 +41,10 @@ export default function LoginScreen() {
         password
       });
 
-      console.log("Signup success:", res.data);
-      alert("Signup Successful!");
+      // alert("Signup Successful! Verify your email.");
+      navigate("/verify-email", { state: { email } });
       setIsLogin(true);
+      // navigate("/dashboard");
     }
 
   } catch (error) {

@@ -5,8 +5,9 @@ import './App.css'
 import Login from './screens/Login'
 // import Signup from './screens/Signup'
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
-// import Dashboard from './screens/Dashboard'
-// import ReceiptsManagement from './screens/ReceiptsManagement'
+import Dashboard from './screens/Dashboard'
+import ReceiptsManagement from './screens/ReceiptsManagement'
+import VerifyEmail from "./screens/VerifyEmail";
 
 
 function App() {
@@ -22,8 +23,9 @@ function App() {
 
       <Routes>
         <Route path="/" element={<Login />} />
-        {/* <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/receipt" element={<ReceiptsManagement />} /> */}
+        <Route path="/verify-email" element={<VerifyEmail />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/receipt" element={<ReceiptsManagement />} />
       </Routes>
     </Router>
     </>
