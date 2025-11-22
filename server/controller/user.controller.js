@@ -2,7 +2,26 @@ const User = require("../models/user.models");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const {sendVerificationEmail} = require("../services/email.service");
+const dotenv = require("dotenv");
+dotenv.config();
 
+const generateAccessToken = (user) => {
+  return jwt.sign(
+    { id: user._id, loginId: user.loginId },
+    process.env.ACCESS_TOKEN_SECRET,
+    { expiresIn: "15m" }
+  );
+};
+
+const generateRefreshToken = (user) => {
+  return jwt.sign(
+    { id: user._id, loginId: user.loginId },
+    process.env.REFRESH_TOKEN_SECRET,
+    { expiresIn: "7d" }
+  );
+};
+ 
+//
 const signup = async (req, res) => {
   try {
     const { loginId, email, password } = req.body;
@@ -133,7 +152,127 @@ const verifyEmail = async (req, res) => {
   }
 };
 
+
+const login = async (req, res) => {
+  try {
+    const { loginId, password } = req.body;
+
+    if (!loginId || !password) {
+      return res.status(400).json({ message: "Login ID and password required" });
+    }
+
+    const user = await User.findOne({ loginId });
+    if (!user) {
+      return res.status(400).json({ message: "Invalid login credentials" });
+    }
+
+    if (!user.isVerified) {
+      return res.status(400).json({ message: "Please verify your email first" });
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ message: "Invalid login credentials" });
+    }
+
+    // Use your existing functions (unchanged)
+    const accessToken = generateAccessToken(user);
+    const refreshToken = generateRefreshToken(user);
+
+    // Save refresh token in DB
+    user.refreshToken = refreshToken;
+    await user.save();
+
+    return res.status(200).json({ message: "Login successful",
+      accessToken,
+      refreshToken
+    });
+
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+const forgotPassword = async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    if (!email) {
+      return res.status(400).json({ message: "Email is required" });
+    }
+
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(400).json({ message: "User with this email does not exist" });
+    }
+
+    // Generate OTP
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+
+    // Save OTP in DB
+    user.emailOtp = otp;
+    user.emailOtpExpiry = Date.now() + 10 * 60 * 1000; // 10 minutes
+    await user.save();
+
+    // Send OTP to email
+    await sendVerificationEmail(email, otp);
+
+    return res.status(200).json({
+      message: "OTP sent successfully"
+    });
+
+  } catch (error) {
+    console.log("Forgot password error:", error);
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+const verifyForgotOtp = async (req, res) => {
+  try {
+    const { email, otp } = req.body;
+
+    if (!email || !otp) {
+      return res.status(400).json({ message: "Email and OTP are required" });
+    }
+
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(400).json({ message: "User not found" });
+    }
+
+    // Check OTP
+    if (user.emailOtp !== otp) {
+      return res.status(400).json({ message: "Invalid OTP" });
+    }
+
+    // Check expiry
+    if (user.emailOtpExpiry < Date.now()) {
+      return res.status(400).json({ message: "OTP expired" });
+    }
+
+    // OTP verified → clear OTP fields (optional, you can keep until reset)
+    // user.emailOtp = undefined;
+    // user.emailOtpExpiry = undefined;
+    // await user.save();
+
+    return res.status(200).json({
+      message: "OTP verified successfully"
+    });
+
+  } catch (error) {
+    console.log("Verify forgot password OTP error:", error);
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+
 module.exports = {
   signup,
-verifyEmail
+verifyEmail,
+    login,
+    forgotPassword,
+    verifyForgotOtp
 };

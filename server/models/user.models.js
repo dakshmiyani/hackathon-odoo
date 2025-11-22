@@ -30,6 +30,10 @@ const userSchema = new mongoose.Schema(
     },
     emailOtpExpiry: {
       type: Date
+    },
+    refreshToken: {
+      type: String,
+      default: null
     }
   },
   { timestamps: true }
