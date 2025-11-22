@@ -32,8 +32,8 @@ export default function LoginScreen() {
       // Store the entire user object returned by backend
       localStorage.setItem("user", JSON.stringify(res.data.user));
       localStorage.setItem("accessToken", res.data.accessToken);
-      console.log(JSON.stringify(res.data.user))
-      console.log(res.data.accessToken)
+      // console.log(JSON.stringify(res.data.user))
+      // console.log(res.data.accessToken)
       navigate("/dashboard");
 
     } else {
@@ -51,7 +51,7 @@ export default function LoginScreen() {
     }
 
   } catch (error) {
-    console.error("API ERROR:", error.response?.data || error.message);
+    // console.error("API ERROR:", error.response?.data || error.message);
     alert(error.response?.data?.message || "Something went wrong");
   }
 };
