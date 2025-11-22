@@ -51,12 +51,7 @@ const productSchema = new mongoose.Schema(
       type: Number,
       default: 5 // default threshold
     }
-    ,
-      createdBy: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-      required: true
-    }           
+              
     
   },
   { timestamps: true }
