@@ -15,6 +15,7 @@ export default function StockAdjustments() {
       recorded: 450,
       counted: 447,
       difference: -3,
+      unitPrice: 150,
       reason: 'Damaged items',
       status: 'Done'
     },
@@ -26,6 +27,7 @@ export default function StockAdjustments() {
       recorded: 50,
       counted: 52,
       difference: 2,
+      unitPrice: 2500,
       reason: 'Found in storage',
       status: 'Done'
     },
@@ -37,6 +39,7 @@ export default function StockAdjustments() {
       recorded: 100,
       counted: 95,
       difference: -5,
+      unitPrice: 450,
       reason: 'Physical count mismatch',
       status: 'Pending'
     }
@@ -53,6 +56,7 @@ export default function StockAdjustments() {
     date: '',
     recorded: '',
     counted: '',
+    unitPrice: '',
     reason: ''
   });
 
@@ -90,13 +94,14 @@ export default function StockAdjustments() {
       recorded: recorded,
       counted: counted,
       difference: difference,
+      unitPrice: parseFloat(newAdjustment.unitPrice),
       reason: newAdjustment.reason,
       status: 'Pending'
     };
     
     setAdjustments([...adjustments, adjustment]);
     setShowCreateModal(false);
-    setNewAdjustment({ product: '', location: '', date: '', recorded: '', counted: '', reason: '' });
+    setNewAdjustment({ product: '', location: '', date: '', recorded: '', counted: '', unitPrice: '', reason: '' });
   };
 
   const filteredAdjustments = adjustments.filter(a => {
@@ -206,7 +211,7 @@ export default function StockAdjustments() {
                     </div>
 
                     {/* Adjustment Details */}
-                    <div className="flex items-center gap-4 mt-3">
+                    <div className="flex items-center gap-4 mt-3 flex-wrap">
                       <div className="flex items-center gap-2 px-3 py-2 bg-gray-50 rounded-lg">
                         <span className="text-xs text-gray-500">Recorded:</span>
                         <span className="font-semibold text-gray-900">{adjustment.recorded}</span>
@@ -219,6 +224,16 @@ export default function StockAdjustments() {
                       <div className={`flex items-center gap-1 px-3 py-2 rounded-lg font-semibold ${getAdjustmentTypeColor(adjustment.difference)}`}>
                         {adjustment.difference > 0 ? <TrendingUp className="w-4 h-4" /> : <TrendingDown className="w-4 h-4" />}
                         <span>{adjustment.difference > 0 ? '+' : ''}{adjustment.difference}</span>
+                      </div>
+                      <div className="flex items-center gap-2 px-3 py-2 bg-indigo-50 rounded-lg">
+                        <span className="text-xs text-indigo-600">Unit Price:</span>
+                        <span className="font-semibold text-indigo-900">₹{adjustment.unitPrice}</span>
+                      </div>
+                      <div className="flex items-center gap-2 px-3 py-2 bg-purple-50 rounded-lg">
+                        <span className="text-xs text-purple-600">Value Impact:</span>
+                        <span className={`font-semibold ${adjustment.difference > 0 ? 'text-green-700' : 'text-red-700'}`}>
+                          {adjustment.difference > 0 ? '+' : ''}₹{(adjustment.difference * adjustment.unitPrice).toLocaleString()}
+                        </span>
                       </div>
                     </div>
 
@@ -307,6 +322,17 @@ export default function StockAdjustments() {
                     className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500"
                   />
                 </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Unit Price (₹)</label>
+                  <input
+                    type="number"
+                    step="0.01"
+                    value={newAdjustment.unitPrice}
+                    onChange={(e) => setNewAdjustment({...newAdjustment, unitPrice: e.target.value})}
+                    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500"
+                    placeholder="Price per unit"
+                  />
+                </div>
               </div>
 
               <div className="grid grid-cols-2 gap-4">
@@ -332,14 +358,25 @@ export default function StockAdjustments() {
                 </div>
               </div>
 
-              {newAdjustment.recorded && newAdjustment.counted && (
-                <div className={`p-4 rounded-xl ${getAdjustmentTypeColor(parseInt(newAdjustment.counted) - parseInt(newAdjustment.recorded))}`}>
-                  <div className="flex items-center justify-between">
-                    <span className="font-medium">Difference:</span>
-                    <span className="text-xl font-bold">
-                      {parseInt(newAdjustment.counted) - parseInt(newAdjustment.recorded) > 0 ? '+' : ''}
-                      {parseInt(newAdjustment.counted) - parseInt(newAdjustment.recorded)}
-                    </span>
+              {newAdjustment.recorded && newAdjustment.counted && newAdjustment.unitPrice && (
+                <div className="space-y-3">
+                  <div className={`p-4 rounded-xl ${getAdjustmentTypeColor(parseInt(newAdjustment.counted) - parseInt(newAdjustment.recorded))}`}>
+                    <div className="flex items-center justify-between">
+                      <span className="font-medium">Quantity Difference:</span>
+                      <span className="text-xl font-bold">
+                        {parseInt(newAdjustment.counted) - parseInt(newAdjustment.recorded) > 0 ? '+' : ''}
+                        {parseInt(newAdjustment.counted) - parseInt(newAdjustment.recorded)}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="p-4 rounded-xl bg-purple-50 border-2 border-purple-200">
+                    <div className="flex items-center justify-between">
+                      <span className="font-medium text-purple-900">Value Impact:</span>
+                      <span className={`text-xl font-bold ${(parseInt(newAdjustment.counted) - parseInt(newAdjustment.recorded)) > 0 ? 'text-green-700' : 'text-red-700'}`}>
+                        {(parseInt(newAdjustment.counted) - parseInt(newAdjustment.recorded)) > 0 ? '+' : ''}
+                        ₹{((parseInt(newAdjustment.counted) - parseInt(newAdjustment.recorded)) * parseFloat(newAdjustment.unitPrice)).toLocaleString()}
+                      </span>
+                    </div>
                   </div>
                 </div>
               )}
@@ -403,9 +440,13 @@ export default function StockAdjustments() {
                   <p className="text-sm text-gray-500 mb-1">Location</p>
                   <p className="font-semibold text-gray-900">{selectedAdjustment.location}</p>
                 </div>
-                <div className="col-span-2">
+                <div>
                   <p className="text-sm text-gray-500 mb-1">Date</p>
                   <p className="font-semibold text-gray-900">{new Date(selectedAdjustment.date).toLocaleDateString()}</p>
+                </div>
+                <div>
+                  <p className="text-sm text-gray-500 mb-1">Unit Price</p>
+                  <p className="font-semibold text-gray-900">₹{selectedAdjustment.unitPrice}</p>
                 </div>
               </div>
 
@@ -419,9 +460,18 @@ export default function StockAdjustments() {
                   <span className="font-bold text-gray-900 text-lg">{selectedAdjustment.counted}</span>
                 </div>
                 <div className="border-t pt-3 flex justify-between items-center">
-                  <span className="font-semibold text-gray-900">Difference:</span>
+                  <span className="font-semibold text-gray-900">Quantity Difference:</span>
                   <span className={`font-bold text-xl ${selectedAdjustment.difference > 0 ? 'text-green-600' : 'text-red-600'}`}>
                     {selectedAdjustment.difference > 0 ? '+' : ''}{selectedAdjustment.difference}
+                  </span>
+                </div>
+              </div>
+
+              <div className="bg-purple-50 border-2 border-purple-200 rounded-xl p-4">
+                <div className="flex justify-between items-center">
+                  <span className="font-semibold text-purple-900">Total Value Impact:</span>
+                  <span className={`font-bold text-2xl ${selectedAdjustment.difference > 0 ? 'text-green-600' : 'text-red-600'}`}>
+                    {selectedAdjustment.difference > 0 ? '+' : ''}₹{(selectedAdjustment.difference * selectedAdjustment.unitPrice).toLocaleString()}
                   </span>
                 </div>
               </div>
