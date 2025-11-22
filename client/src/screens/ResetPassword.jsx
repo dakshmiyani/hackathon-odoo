@@ -8,11 +8,11 @@ export default function ResetPassword() {
   const location = useLocation();
   const { email } = location.state || {};
 
-  const [password, setPassword] = useState("");
-  const [rePassword, setRePassword] = useState("");
+  const [newPassword, setPassword] = useState("");
+  const [confirmPassword, setRePassword] = useState("");
 
   const handleReset = async () => {
-    if (password !== rePassword) {
+    if (newPassword !== confirmPassword) {
       alert("Passwords do not match!");
       return;
     }
@@ -20,7 +20,8 @@ export default function ResetPassword() {
     try {
       const res = await axios.post("http://localhost:5000/api/auth/reset-password", {
         email,
-        password,
+        newPassword,
+        confirmPassword,
       });
 
       alert("Password updated successfully!");
@@ -52,10 +53,10 @@ export default function ResetPassword() {
             <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
             <input
               type="password"
-              value={password}
+              value={newPassword}
               onChange={(e) => setPassword(e.target.value)}
               className="w-full pl-11 pr-4 py-3 border rounded-xl outline-none"
-              placeholder="••••••••"
+            //   placeholder="••••••••"
             />
           </div>
         </div>
@@ -69,10 +70,10 @@ export default function ResetPassword() {
             <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
             <input
               type="password"
-              value={rePassword}
+              value={confirmPassword}
               onChange={(e) => setRePassword(e.target.value)}
               className="w-full pl-11 pr-4 py-3 border rounded-xl outline-none"
-              placeholder="••••••••"
+            //   placeholder="••••••••"
             />
           </div>
         </div>

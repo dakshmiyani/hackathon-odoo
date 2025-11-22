@@ -11,6 +11,7 @@ import VerifyEmail from "./screens/VerifyEmail";
 import ForgotPassword from './screens/ForgotPass'
 import ResetOtp from "./screens/ResetOTP";
 import ResetPassword from "./screens/ResetPassword";
+import ProductsManagement from './screens/ProductManagement'
 
 
 function App() {
@@ -31,6 +32,7 @@ function App() {
         <Route path="/reset-otp" element={<ResetOtp />} />
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/product" element={<ProductsManagement />} />
         <Route path="/receipt" element={<ReceiptsManagement />} />
       </Routes>
     </Router>
