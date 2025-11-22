@@ -5,8 +5,8 @@ const addProduct = async (req, res) => {
   try {
     const { productName, sku, category, unit, perUnitCost, stock, freeToUse, lowStockLevel } = req.body;
 
-    // SKU must be unique
-    const existingSKU = await Product.findOne({ sku });
+    // SKU must be unique (but unique PER USER)
+    const existingSKU = await Product.findOne({ sku, createdBy: req.user.id });
     if (existingSKU) {
       return res.status(400).json({ message: "SKU already exists" });
     }
@@ -19,7 +19,8 @@ const addProduct = async (req, res) => {
       perUnitCost,
       stock,
       freeToUse,
-      lowStockLevel
+      lowStockLevel,
+      createdBy: req.user.id   // 🔥 IMPORTANT
     });
 
     return res.status(201).json(product);
@@ -30,12 +31,14 @@ const addProduct = async (req, res) => {
   }
 };
 
-// ----------------------- GET ALL PRODUCTS -----------------------
+// ----------------------- GET ALL PRODUCTS (USER SPECIFIC) -----------------------
 const getProducts = async (req, res) => {
   try {
     const { search, category } = req.query;
 
-    let filter = {};
+    let filter = {
+      createdBy: req.user.id // 🔥 ONLY return user's products
+    };
 
     if (search) {
       filter.$or = [
@@ -62,7 +65,11 @@ const updateProduct = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const updated = await Product.findByIdAndUpdate(id, req.body, { new: true });
+    const updated = await Product.findOneAndUpdate(
+      { _id: id, createdBy: req.user.id }, // 🔥 ONLY user can update his product
+      req.body,
+      { new: true }
+    );
 
     if (!updated) {
       return res.status(404).json({ message: "Product not found" });
@@ -81,7 +88,10 @@ const deleteProduct = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const deleted = await Product.findByIdAndDelete(id);
+    const deleted = await Product.findOneAndDelete({
+      _id: id,
+      createdBy: req.user.id // 🔥 ONLY user can delete his product
+    });
 
     if (!deleted) {
       return res.status(404).json({ message: "Product not found" });
@@ -95,12 +105,9 @@ const deleteProduct = async (req, res) => {
   }
 };
 
-
-
 module.exports = {
   addProduct,
   getProducts,
   updateProduct,
   deleteProduct,
- 
 };
