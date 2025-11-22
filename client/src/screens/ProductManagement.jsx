@@ -1045,6 +1045,7 @@ export default function ProductsManagement() {
 
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
+  const user = JSON.parse(localStorage.getItem("user"));
 
   // add form
   const [newProduct, setNewProduct] = useState({
@@ -1094,27 +1095,27 @@ export default function ProductsManagement() {
   };
 
   // ---------- fetch products ----------
-  // const fetchProducts = async () => {
-  //   setLoading(true);
-  //   try {
-  //     const res = await axios.get("http://localhost:5000/api/products");
-  //     if (res?.data && Array.isArray(res.data)) {
-  //       const mapped = res.data.map(mapBackendToUI);
-  //       setProducts(mapped);
-  //     } else {
-  //       // if backend does not return array, just keep existing
-  //     }
-  //   } catch (err) {
-  //     // silently ignore; UI will work with locally added items
-  //     // console.warn("Fetch products failed:", err.message);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
+  const fetchProducts = async () => {
+    setLoading(true);
+    try {
+      const res = await axios.get(`http://localhost:5000/api/products/get`);
+      if (res?.data && Array.isArray(res.data)) {
+        const mapped = res.data.map(mapBackendToUI);
+        setProducts(mapped);
+      } else {
+        // if backend does not return array, just keep existing
+      }
+    } catch (err) {
+      // silently ignore; UI will work with locally added items
+      // console.warn("Fetch products failed:", err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-  // useEffect(() => {
-  //   fetchProducts();
-  // }, []);
+  useEffect(() => {
+    fetchProducts();
+  }, []);
 
   // ---------- add product ----------
   const handleAddProduct = async () => {
@@ -1178,7 +1179,7 @@ export default function ProductsManagement() {
     try {
       // If product.id is backend id, call delete endpoint
       // backend expected: DELETE /api/products/:id
-      await axios.delete(`http://localhost:5000/api/products/${prod.id}`);
+      await axios.delete(`http://localhost:5000/api/products/delete/${prod.id}`);
     } catch (err) {
       // ignore backend error; proceed to remove from UI nevertheless
       // console.warn("Delete backend failed (maybe endpoint absent):", err.message);
@@ -1224,7 +1225,7 @@ export default function ProductsManagement() {
 
     try {
       // PUT /api/products/:id
-      await axios.put(`http://localhost:5000/api/products/${id}`, body);
+      await axios.put(`http://localhost:5000/api/products/update/${id}`, body);
 
       // update UI
       setProducts((prev) =>
