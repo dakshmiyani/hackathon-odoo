@@ -337,5 +337,6 @@ verifyEmail,
     login,
     forgotPassword,
     verifyForgotOtp,
-    resetPassword
+    resetPassword,
+  
 };
