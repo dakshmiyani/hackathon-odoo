@@ -4,9 +4,12 @@ import {
   Package, Settings, Bell, Lock, User, Mail, 
   Phone, Building, Globe, Save, X, Check
 } from 'lucide-react';
+import { useNavigate } from "react-router-dom";
 
 export default function WarehousesSettings() {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('warehouses');
+  const user = JSON.parse(localStorage.getItem("user"));
   const [warehouses, setWarehouses] = useState([
     { 
       id: 1, 
@@ -118,6 +121,26 @@ export default function WarehousesSettings() {
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-4 lg:p-8">
       {/* Header */}
       <div className="mb-8">
+        <button
+  onClick={() => navigate("/dashboard")}
+  className="flex items-center gap-2 text-indigo-600 hover:text-indigo-800 font-medium mb-4 group"
+>
+  <svg 
+    xmlns="http://www.w3.org/2000/svg" 
+    fill="none" 
+    viewBox="0 0 24 24" 
+    strokeWidth={2} 
+    stroke="currentColor" 
+    className="w-5 h-5 transform group-hover:-translate-x-1 transition-all"
+  >
+    <path 
+      strokeLinecap="round" 
+      strokeLinejoin="round" 
+      d="M15.75 19.5L8.25 12l7.5-7.5" 
+    />
+  </svg>
+  <span>Back to Dashboard</span>
+</button>
         <h1 className="text-3xl font-bold text-gray-900 mb-2">Settings</h1>
         <p className="text-gray-600">Manage warehouses, profile, and system preferences</p>
       </div>
@@ -237,7 +260,7 @@ export default function WarehousesSettings() {
           
           <div className="flex items-center gap-4 mb-6">
             <div className="w-20 h-20 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white text-2xl font-bold">
-              JD
+              {user?.email?.charAt(0)?.toUpperCase()}
             </div>
             <button className="px-4 py-2 text-sm text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors">
               Change Photo
@@ -252,7 +275,7 @@ export default function WarehousesSettings() {
                   <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
                   <input
                     type="text"
-                    value={userSettings.name}
+                    value={user.loginId}
                     onChange={(e) => setUserSettings({...userSettings, name: e.target.value})}
                     className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500"
                   />
@@ -264,7 +287,7 @@ export default function WarehousesSettings() {
                   <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
                   <input
                     type="email"
-                    value={userSettings.email}
+                    value={user.email}
                     onChange={(e) => setUserSettings({...userSettings, email: e.target.value})}
                     className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500"
                   />

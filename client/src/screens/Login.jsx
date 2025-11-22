@@ -229,13 +229,13 @@ export default function LoginScreen() {
             <div className="absolute inset-0 flex items-center">
               <div className="w-full border-t border-gray-200"></div>
             </div>
-            <div className="relative flex justify-center text-sm">
+            {/* <div className="relative flex justify-center text-sm">
               <span className="px-4 bg-white text-gray-500">Or continue with</span>
-            </div>
+            </div> */}
           </div>
 
           {/* Social Login */}
-          <div className="grid grid-cols-2 gap-3">
+          {/* <div className="grid grid-cols-2 gap-3">
             <button className="flex items-center justify-center gap-2 py-2.5 border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors">
               <svg className="w-5 h-5" viewBox="0 0 24 24">
                 <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -251,11 +251,8 @@ export default function LoginScreen() {
               </svg>
               <span className="text-sm font-medium text-gray-700">Facebook</span>
             </button>
-          </div>
-        </div>
-
-        {/* Footer Text */}
-        <p className="text-center text-sm text-gray-600 mt-6">
+          </div> */}
+          <p className="text-center text-sm text-gray-600 mt-6">
           {isLogin ? "Don't have an account? " : "Already have an account? "}
           <button
             onClick={() => setIsLogin(!isLogin)}
@@ -264,6 +261,10 @@ export default function LoginScreen() {
             {isLogin ? 'Sign up free' : 'Login here'}
           </button>
         </p>
+        </div>
+
+        {/* Footer Text */}
+        
       </div>
     </div>
   );

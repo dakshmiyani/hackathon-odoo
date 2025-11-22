@@ -57,7 +57,7 @@ export default function Dashboard() {
       bgColor: 'bg-purple-50'
     },
     {
-      title: 'Internal Transfers',
+      title: 'Move History',
       value: '18',
       change: '0%',
       trend: 'neutral',
@@ -79,9 +79,9 @@ export default function Dashboard() {
   const recentActivities = [
     { type: 'Receipt', item: 'Steel Rods', qty: '50 units', status: 'Done', time: '10 min ago', color: 'text-green-600' },
     { type: 'Delivery', item: 'Office Chairs', qty: '10 units', status: 'Ready', time: '25 min ago', color: 'text-blue-600' },
-    { type: 'Transfer', item: 'Paint Cans', qty: '30 units', status: 'Waiting', time: '1 hour ago', color: 'text-amber-600' },
-    { type: 'Adjustment', item: 'Steel Rods', qty: '-3 units', status: 'Done', time: '2 hours ago', color: 'text-purple-600' },
-    { type: 'Receipt', item: 'Laptops', qty: '15 units', status: 'Draft', time: '3 hours ago', color: 'text-gray-600' }
+    { type: 'History', item: 'Paint Cans', qty: '30 units', status: 'Waiting', time: '1 hour ago', color: 'text-amber-600' },
+    { type: 'Stock', item: 'Steel Rods', qty: '-3 units', status: 'Done', time: '2 hours ago', color: 'text-purple-600' },
+    { type: 'Product', item: 'Laptops', qty: '15 units', status: 'Draft', time: '3 hours ago', color: 'text-gray-600' }
   ];
 
   const menuItems = [
@@ -181,7 +181,7 @@ export default function Dashboard() {
               </button>
               <div>
                 <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
-                <p className="text-sm text-gray-500">Welcome back,<b>{user?.email}</b>!</p>
+                <p className="text-sm text-gray-500">Welcome back,<b>{user?.loginId}</b>!</p>
               </div>
             </div>
             <div className="flex items-center gap-3">

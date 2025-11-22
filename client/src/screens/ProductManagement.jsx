@@ -1034,8 +1034,10 @@ import {
   RefreshCw
 } from "lucide-react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export default function ProductsManagement() {
+  const navigate = useNavigate();
   // ---------- state ----------
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -1272,9 +1274,28 @@ export default function ProductsManagement() {
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-4 lg:p-8">
       {/* Header */}
       <div className="mb-8">
+        <button
+  onClick={() => navigate("/dashboard")}
+  className="flex items-center gap-2 text-indigo-600 hover:text-indigo-800 font-medium mb-4 group"
+>
+  <svg 
+    xmlns="http://www.w3.org/2000/svg" 
+    fill="none" 
+    viewBox="0 0 24 24" 
+    strokeWidth={2} 
+    stroke="currentColor" 
+    className="w-5 h-5 transform group-hover:-translate-x-1 transition-all"
+  >
+    <path 
+      strokeLinecap="round" 
+      strokeLinejoin="round" 
+      d="M15.75 19.5L8.25 12l7.5-7.5" 
+    />
+  </svg>
+  <span>Back to Dashboard</span>
+</button>
         <h1 className="text-3xl font-bold text-gray-900 mb-2">Products Management</h1>
         <p className="text-gray-600">Manage your product inventory and stock levels</p>
-        <p className="text-xs text-gray-400 mt-1">Design spec: <code className="bg-white/70 px-2 py-1 rounded">{"/mnt/data/StockMaster.pdf"}</code></p>
       </div>
 
       {/* Action Bar */}

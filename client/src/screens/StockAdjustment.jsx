@@ -4,8 +4,10 @@ import {
   TrendingUp, TrendingDown, Calendar, MapPin,
   Check, X, Package
 } from 'lucide-react';
+import { useNavigate } from "react-router-dom";
 
 export default function StockAdjustments() {
+  const navigate = useNavigate();
   const [adjustments, setAdjustments] = useState([
     { 
       id: 'ADJ-001', 
@@ -117,6 +119,26 @@ export default function StockAdjustments() {
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-4 lg:p-8">
       {/* Header */}
       <div className="mb-8">
+        <button
+  onClick={() => navigate("/dashboard")}
+  className="flex items-center gap-2 text-indigo-600 hover:text-indigo-800 font-medium mb-4 group"
+>
+  <svg 
+    xmlns="http://www.w3.org/2000/svg" 
+    fill="none" 
+    viewBox="0 0 24 24" 
+    strokeWidth={2} 
+    stroke="currentColor" 
+    className="w-5 h-5 transform group-hover:-translate-x-1 transition-all"
+  >
+    <path 
+      strokeLinecap="round" 
+      strokeLinejoin="round" 
+      d="M15.75 19.5L8.25 12l7.5-7.5" 
+    />
+  </svg>
+  <span>Back to Dashboard</span>
+</button>
         <h1 className="text-3xl font-bold text-gray-900 mb-2">Stock Adjustments</h1>
         <p className="text-gray-600">Fix mismatches between recorded and physical stock counts</p>
       </div>
