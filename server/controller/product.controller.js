@@ -95,32 +95,12 @@ const deleteProduct = async (req, res) => {
   }
 };
 
-// ----------------------- UPDATE STOCK -----------------------
-const updateStock = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const { stock, freeToUse } = req.body;
 
-    const product = await Product.findById(id);
-
-    if (!product) return res.status(404).json({ message: "Product not found" });
-
-    product.stock = stock;
-    product.freeToUse = freeToUse;
-
-    await product.save();
-
-    return res.status(200).json({ message: "Stock updated", product });
-  } catch (error) {
-    console.log("Update stock error:", error);
-    return res.status(500).json({ message: "Internal Server Error" });
-  }
-};
 
 module.exports = {
   addProduct,
   getProducts,
   updateProduct,
   deleteProduct,
-  updateStock
+ 
 };
