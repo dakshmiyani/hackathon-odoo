@@ -268,11 +268,72 @@ const verifyForgotOtp = async (req, res) => {
   }
 };
 
+const resetPassword = async (req, res) => {
+  try {
+    const { email, newPassword, confirmPassword } = req.body;
+
+    if (!email || !newPassword || !confirmPassword) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
+
+    // Check both passwords are same
+    if (newPassword !== confirmPassword) {
+      return res.status(400).json({ message: "Passwords do not match" });
+    }
+
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(400).json({ message: "User not found" });
+    }
+
+    // User must have OTP from forgot password flow
+    if (!user.emailOtp || !user.emailOtpExpiry) {
+      return res.status(400).json({
+        message: "OTP verification required before resetting password"
+      });
+    }
+
+    // Validate password (same rule used in signup)
+    const passRegex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,}$/;
+
+    if (!passRegex.test(newPassword)) {
+      return res.status(400).json({
+        message:
+          "Password must include uppercase, lowercase, special char, and be >8 characters"
+      });
+    }
+
+    // Hash new password
+    const hashedPass = await bcrypt.hash(newPassword, 10);
+
+    user.password = hashedPass;
+
+    // Clear OTP fields so it cannot be reused
+    user.emailOtp = undefined;
+    user.emailOtpExpiry = undefined;
+
+    await user.save();
+
+    return res.status(200).json({
+      message: "Password reset successfully"
+    });
+
+  } catch (error) {
+    console.log("Reset password error:", error);
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+
+
 
 module.exports = {
   signup,
 verifyEmail,
     login,
     forgotPassword,
-    verifyForgotOtp
+    verifyForgotOtp,
+    resetPassword
 };
