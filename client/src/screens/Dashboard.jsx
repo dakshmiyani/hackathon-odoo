@@ -79,14 +79,14 @@ export default function Dashboard() {
   ];
 
   const menuItems = [
-    { icon: BarChart3, label: 'Dashboard', active: true },
-    { icon: Package, label: 'Products' },
-    { icon: Truck, label: 'Receipts' },
-    { icon: FileText, label: 'Deliveries' },
-    { icon: ArrowRightLeft, label: 'Transfers' },
-    { icon: ClipboardList, label: 'Adjustments' },
-    { icon: Warehouse, label: 'Warehouses' },
-    { icon: Settings, label: 'Settings' }
+    { icon: BarChart3, label: 'Dashboard', active: true, route: "/dashboard" },
+    { icon: Package, label: 'Products', route: "/product" },
+    { icon: Truck, label: 'Receipts', route: "/receipt" },
+    { icon: FileText, label: 'Deliveries', route: "/delivery"},
+    { icon: ArrowRightLeft, label: 'History', route: '/internal' },
+    { icon: ClipboardList, label: 'Stock', route: "/stock" },
+    { icon: Warehouse, label: 'Warehouses', route: '/setting' },
+    // { icon: Settings, label: 'Settings' }
   ];
 
   return (
@@ -121,20 +121,21 @@ export default function Dashboard() {
 
         {/* Menu Items */}
         <nav className="p-4 space-y-1">
-          {menuItems.map((item, idx) => (
-            <button
-              key={idx}
-              className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${
-                item.active 
-                  ? 'bg-gradient-to-r from-indigo-600 to-cyan-600 text-white shadow-lg' 
-                  : 'text-gray-600 hover:bg-gray-100'
-              }`}
-            >
-              <item.icon className="w-5 h-5" />
-              <span className="font-medium" onClick={() => navigate("/receipt")}>{item.label}</span>
-            </button>
-          ))}
-        </nav>
+  {menuItems.map((item, idx) => (
+    <button
+      key={idx}
+      onClick={() => navigate(item.route)}   // 👈 DYNAMIC ROUTING HERE
+      className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${
+        item.active 
+          ? 'bg-gradient-to-r from-indigo-600 to-cyan-600 text-white shadow-lg' 
+          : 'text-gray-600 hover:bg-gray-100'
+      }`}
+    >
+      <item.icon className="w-5 h-5" />
+      <span className="font-medium">{item.label}</span>
+    </button>
+  ))}
+</nav>
 
         {/* Profile Section */}
         <div className="absolute bottom-0 left-0 right-0 p-4 border-t bg-gray-50">
@@ -186,10 +187,10 @@ export default function Dashboard() {
                   className="pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                 />
               </div>
-              <button className="relative p-2 text-gray-600 hover:bg-gray-100 rounded-lg">
+              {/* <button className="relative p-2 text-gray-600 hover:bg-gray-100 rounded-lg">
                 <Bell className="w-6 h-6" />
                 <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
-              </button>
+              </button> */}
             </div>
           </div>
         </header>
