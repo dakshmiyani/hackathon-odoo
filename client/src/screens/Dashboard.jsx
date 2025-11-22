@@ -12,6 +12,11 @@ export default function Dashboard() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [selectedFilter, setSelectedFilter] = useState('all');
   const [statusFilter, setStatusFilter] = useState('all');
+  const user = JSON.parse(localStorage.getItem("user"));
+  const logout = () => {
+  localStorage.removeItem("accessToken");
+  window.location.href = "/";
+};
 
   const kpiData = [
     {
@@ -144,8 +149,8 @@ export default function Dashboard() {
               JD
             </div>
             <div className="flex-1">
-              <p className="font-medium text-gray-900">John Doe</p>
-              <p className="text-xs text-gray-500">Inventory Manager</p>
+              <p className="font-medium text-gray-900">{user?.loginId}</p>
+              <p className="text-xs text-gray-500">{user?.email}</p>
             </div>
           </div>
           <div className="flex gap-2">
@@ -153,7 +158,7 @@ export default function Dashboard() {
               <User className="w-4 h-4" />
               Profile
             </button>
-            <button className="flex-1 flex items-center justify-center gap-2 py-2 text-sm text-red-600 hover:bg-red-50 rounded-lg transition-colors">
+            <button className="flex-1 flex items-center justify-center gap-2 py-2 text-sm text-red-600 hover:bg-red-50 rounded-lg transition-colors" onClick={() => logout()}>
               <LogOut className="w-4 h-4" />
               Logout
             </button>
@@ -175,7 +180,7 @@ export default function Dashboard() {
               </button>
               <div>
                 <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
-                <p className="text-sm text-gray-500">Welcome back, John!</p>
+                <p className="text-sm text-gray-500">Welcome back,<b>{user?.email}</b>!</p>
               </div>
             </div>
             <div className="flex items-center gap-3">

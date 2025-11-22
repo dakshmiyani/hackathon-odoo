@@ -29,8 +29,11 @@ export default function LoginScreen() {
         password
       });
 
-      console.log("Login success:", res.data);
-      localStorage.setItem("token", res.data.token); // Store JWT
+      // Store the entire user object returned by backend
+      localStorage.setItem("user", JSON.stringify(res.data.user));
+      localStorage.setItem("accessToken", res.data.accessToken);
+      console.log(JSON.stringify(res.data.user))
+      console.log(res.data.accessToken)
       navigate("/dashboard");
 
     } else {
