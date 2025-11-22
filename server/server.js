@@ -5,7 +5,13 @@ const dotenv = require("dotenv");
 dotenv.config();
 
 const connectDB = require("./database/db");
+// Connect DB
+connectDB();
+
+
+// Routes
 const authRoutes = require("./routes/user.routes");
+const productRoutes = require("./routes/product.routes");
 
 const app = express();
 
@@ -15,9 +21,9 @@ app.use(express.json());
 
 // Routes
 app.use("/api/auth", authRoutes);
+app.use("/api/products", productRoutes);
 
-// Connect DB
-connectDB();
+
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
